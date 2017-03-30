@@ -7,6 +7,11 @@ import java.util.ArrayList;
  */
 public abstract class Grabber {
     private ArrayList<String> animeLink;
+
+    public Grabber(ArrayList<String> animeLink) {
+        this.animeLink = animeLink;
+    }
+
     public ArrayList<String> getAnimeLink() {
         return animeLink == null ? new ArrayList<>() : animeLink;
     }
@@ -21,7 +26,7 @@ public abstract class Grabber {
     /**
         abstract method bec different websites uses different patterns for url
         so have to override it for every website
-        @param link link to the desired website
+        @param link the link to the desired website
      */
     protected abstract void enQueueAnimeLink(String link);
     protected String deQueueAnimeLink()
@@ -35,7 +40,8 @@ public abstract class Grabber {
     {
         new Thread(() -> {
             for (int i = 0; i <animeLink.size(); i++) {
-                analyze(deQueueAnimeLink());
+                //deQueueAnimeLink()
+                analyze(""); //TODO send website data
             }
         }).start();
     }
