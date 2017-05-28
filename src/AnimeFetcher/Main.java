@@ -17,8 +17,9 @@ public class Main extends Application {
         primaryStage.show();
         //TODO
         // Saver to test the grabber
-    }
 
+
+    }
 
     public static void main(String[] args) {
         launch(args);

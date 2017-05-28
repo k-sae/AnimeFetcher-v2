@@ -1,7 +1,9 @@
 package AnimeFetcher.Grabber.AddAnime;
 
+import AnimeFetcher.Grabber.CorruptedDataException;
 import AnimeFetcher.Grabber.Grabber;
 
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,14 +16,17 @@ public class AddAnimeGrabber extends Grabber {
         super(animeLink);
     }
 
-    @Override
-    protected void enQueueAnimeLink(String link) {
-        
+    public AddAnimeGrabber() {
     }
 
-    @Override
-    protected void analyze(String websiteData) {
 
+    @Override
+    protected void analyze(String websiteData)  throws CorruptedDataException {
+//        try {
+//            BufferedWriter bufferedWriter = new BufferedWriter();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

@@ -13,24 +13,25 @@ import java.util.ArrayList;
  */
 public abstract class Grabber {
     private ArrayList<String> animeLinks;
-
+    private int retryAfter;
     public Grabber(ArrayList<String> animeLinks) {
         this.animeLinks = animeLinks;
     }
     public Grabber()
     {
-
+        animeLinks = new ArrayList<>();
     }
     @SuppressWarnings("WeakerAccess")
     public ArrayList<String> getAnimeLinks() {
-        return animeLinks == null ? new ArrayList<>() : animeLinks;
+        return animeLinks;
     }
    /**
-        abstract method bec different websites uses different patterns for url
-        so have to override it for every website
         @param link the link to the desired website
      */
-    protected abstract void enQueueAnimeLink(String link);
+    public void enQueueAnimeLink(String link)
+    {
+        animeLinks.add(link);
+    }
     private String deQueueAnimeLink()
     {
        String link = animeLinks.get(0);
@@ -44,10 +45,11 @@ public abstract class Grabber {
             for (int i = 0; i < animeLinks.size(); i++) {
                 try {
                     //do it in two steps so when an exception is thrown no data is lost
-                    analyze(getWebsiteData(getAnimeLinks().get(0)));
-                    deQueueAnimeLink();
+                    analyze(getWebsiteData( deQueueAnimeLink()));
+
                 } catch (IOException e) {
                     e.printStackTrace();
+                    i--;
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e1) {
@@ -57,9 +59,15 @@ public abstract class Grabber {
             }
         }).start();
     }
-    //
-    //Warning: this function will be called from a Thread other than the main thread
-    protected abstract void analyze(String websiteData);
+
+    /**
+     * this function is called after downloading website data
+     * WARNING this function will be called from a Thread other than the main thread
+     * @param websiteData data resulted after de
+     * @throws CorruptedDataException to request redownloading the website
+     */
+    protected abstract void analyze(String websiteData) throws CorruptedDataException;
+
     /**
      @throws IOException if connection error or empty response or whatever
      is negative
@@ -94,5 +102,25 @@ public abstract class Grabber {
     }
     //this should return a the full url with all the uri param
     //although u should specify the Request Method ie: (GET or POST)
+
+    /** pass the url before Dequeue for last changes
+     *
+     * @param animeLink the next link in the link queue
+     * @return URL after adding last changes
+     */
     protected abstract URL fetchUrl(String animeLink);
+
+    /**
+     * @return  time needed in milli seconds for next retry when connection fails
+     */
+    public int getRetryAfter() {
+        return retryAfter;
+    }
+
+    /**
+     * @param retryAfter time needed in milli seconds for next retry when connection fails
+     */
+    public void setRetryAfter(int retryAfter) {
+        this.retryAfter = retryAfter;
+    }
 }
