@@ -2,6 +2,8 @@ package AnimeFetcher;
 
 import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
 import AnimeFetcher.Grabber.JSParser;
+import AnimeFetcher.Grabber.Progress;
+import AnimeFetcher.Grabber.ProgressListener;
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.JavaMethod;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -22,6 +24,12 @@ public class Main extends Application {
         AddAnimeGrabber addAnimeGrabber = new AddAnimeGrabber();
         addAnimeGrabber.enQueueAnimeLink("http://add-anime.net/video/82AD3YD7ONBN/One-Piece-790");
         addAnimeGrabber.enQueueAnimeLink("http://add-anime.net/video/HOGXY9SMAXD4/One-Piece-399");
+        addAnimeGrabber.getDownloader().addProgressListener(new ProgressListener() {
+            @Override
+            public void reportProgress(Progress progress) {
+                System.out.println(progress.getPercentage());
+            }
+        });
         addAnimeGrabber.startGrabbing();
 
     }

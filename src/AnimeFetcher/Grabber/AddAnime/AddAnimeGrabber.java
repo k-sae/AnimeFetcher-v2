@@ -1,6 +1,7 @@
 package AnimeFetcher.Grabber.AddAnime;
 
 import AnimeFetcher.Grabber.CorruptedDataException;
+import AnimeFetcher.Grabber.Downloader;
 import AnimeFetcher.Grabber.Grabber;
 import AnimeFetcher.Grabber.JSParser;
 import org.jsoup.Jsoup;
@@ -10,6 +11,7 @@ import org.jsoup.nodes.Element;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 
 /**
@@ -44,11 +46,12 @@ public class AddAnimeGrabber extends Grabber {
         super(animeLink);
     }
     private VideoType videoType;
-    private String downloadLocation;
     private boolean isInProgress;
+    private Downloader downloader;
+
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
-        downloadLocation = "downloads";
+        downloader = new Downloader();
     }
 
 
@@ -56,11 +59,11 @@ public class AddAnimeGrabber extends Grabber {
     protected void analyze(String websiteData)  throws CorruptedDataException {
         JSParser jsParser = new JSParser(websiteData);
         if (videoType == VideoType.HighQuality) {
-          startDownloading(jsParser.pickVariable("hq_video_file"));
+            downloader.startDownloading(jsParser.pickVariable("hq_video_file"));
         }
         else if (videoType == VideoType.Normal)
         {
-            startDownloading(jsParser.pickVariable("normal_video_file"));
+            downloader.startDownloading(jsParser.pickVariable("normal_video_file"));
         }
     }
 
@@ -81,32 +84,11 @@ public class AddAnimeGrabber extends Grabber {
     public void setVideoType(VideoType videoType) {
         this.videoType = videoType;
     }
-    private void startDownloading(String url)
-    {
-        try {
-            // list with all params ti start wget
-            ArrayList<String> params = new ArrayList<>(4);
-            params.add("Wget/wget.exe");
-            params.add("-c");
-            params.add(url);
-            params.add(downloadLocation);
-            ProcessBuilder processBuilder = new ProcessBuilder(params);
-            processBuilder.redirectErrorStream(true); // for some reason it will not work without it :0
-            Process process = processBuilder.start();
-            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            //start listening for wget
-            while ((line = input.readLine()) != null) {
-                //TODO
-                //      1- trigger listeners up here
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     public boolean isInProgress() {
         return isInProgress;
     }
 
+    public Downloader getDownloader() {
+        return downloader;
+    }
 }

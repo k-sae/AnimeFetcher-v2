@@ -4,14 +4,14 @@ package AnimeFetcher.Grabber;
  * Created by kemo on 29/05/2017.
  */
 public class Progress {
-    private int percentage;
+    private String percentage;
     private String timeRemaining;
     private String speed;
-    public int getPercentage() {
+    public String getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(int percentage) {
+    public void setPercentage(String percentage) {
         this.percentage = percentage;
     }
 
