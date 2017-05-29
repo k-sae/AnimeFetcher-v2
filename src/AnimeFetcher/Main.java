@@ -1,6 +1,8 @@
 package AnimeFetcher;
 
 import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
+import AnimeFetcher.Grabber.JSParser;
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.JavaMethod;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

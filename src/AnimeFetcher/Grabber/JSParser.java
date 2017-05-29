@@ -10,27 +10,45 @@ public class JSParser {
     public JSParser(String data) {
         this.data = data;
     }
+
+    /**
+     *  pickVariable Value from javascript code
+     *  NOTE: this inline values not supported and will lead the function to crash: " '
+     * @return variable value
+     */
     public String pickVariable(String varName)
     {
         if (data.contains(varName))
         {
-            String value = "";
-            int crawler = data.indexOf(varName) + varName.length();
-            boolean isEqualHit= false;
+            StringBuilder value = new StringBuilder();
+            int crawler =  data.indexOf(varName) + varName.length();
+            data =  data.substring(crawler);
             boolean isStringHit = false;
-            while (data.charAt(crawler) != ';')
+            crawler = data.indexOf("=") + 1;
+            data = data.substring(crawler);
+            crawler = 0;
+            char c = ' ';
+            while (c != ';')
             {
-                if (data.charAt(crawler++) == '"')
+                c = data.charAt(crawler++);
+                if (isStringHit)
                 {
-
+                    value.append(c);
                 }
-               else if (data.charAt(crawler++) == '=')
+                else if (c == '"' || c == '\'')
                 {
-
+                    isStringHit = true;
+                }
+                else if(c != ' ')
+                {
+                    value.append(c);
                 }
             }
-            return value;
+            String val = value.toString();
+            val = val.replace("\"", "");
+            val = val.replace("'", "");
+            return val.substring(0, val.length() - 1);
         }
-        else  return null;
+          return null;
     }
 }
