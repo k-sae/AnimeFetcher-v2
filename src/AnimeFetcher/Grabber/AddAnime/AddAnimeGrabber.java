@@ -37,16 +37,18 @@ import java.util.ArrayList;
         }
 */
 
-
+// i think this should be singleton
+    // decide later :)
 public class AddAnimeGrabber extends Grabber {
     public AddAnimeGrabber(ArrayList<String> animeLink) {
         super(animeLink);
     }
     private VideoType videoType;
     private String downloadLocation;
+    private boolean isInProgress;
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
-        downloadLocation = "/downloads";
+        downloadLocation = "downloads";
     }
 
 
@@ -79,23 +81,32 @@ public class AddAnimeGrabber extends Grabber {
     public void setVideoType(VideoType videoType) {
         this.videoType = videoType;
     }
-    private boolean startDownloading(String url)
+    private void startDownloading(String url)
     {
-        Runtime runtime = Runtime.getRuntime();
         try {
-//            Process process = runtime.exec("Wget/wget.exe -c " + url + " " + downloadLocation);
-            Process process = runtime.exec("dir");
+            // list with all params ti start wget
+            ArrayList<String> params = new ArrayList<>(4);
+            params.add("Wget/wget.exe");
+            params.add("-c");
+            params.add(url);
+            params.add(downloadLocation);
+            ProcessBuilder processBuilder = new ProcessBuilder(params);
+            processBuilder.redirectErrorStream(true); // for some reason it will not work without it :0
+            Process process = processBuilder.start();
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuilder result = new StringBuilder();
             String line;
+            //start listening for wget
             while ((line = input.readLine()) != null) {
-                result.append("\n").append(line);
+                //TODO
+                //      1- trigger listeners up here
                 System.out.println(line);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
     }
+    public boolean isInProgress() {
+        return isInProgress;
+    }
+
 }
