@@ -42,14 +42,13 @@ public abstract class Grabber {
     public void startGrabbing()
     {
         new Thread(() -> {
-            for (int i = 0; i < animeLinks.size(); i++) {
+            while (animeLinks.size() != 0) {
                 try {
                     //do it in two steps so when an exception is thrown no data is lost
                     analyze(getWebsiteData( deQueueAnimeLink()));
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    i--;
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e1) {
