@@ -29,6 +29,10 @@ public class Main extends Application {
             public void reportProgress(Progress progress) {
                 System.out.println(progress.getPercentage());
             }
+
+            @Override
+            public void onFinish() {
+            }
         });
         addAnimeGrabber.startGrabbing();
 

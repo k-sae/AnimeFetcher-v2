@@ -11,9 +11,13 @@ import java.util.ArrayList;
 public class Downloader {
     private ArrayList<ProgressListener> progressListeners;
     private String location;
+    private String fileName;
     public Downloader() {
         progressListeners = new ArrayList<>();
-        location = "";
+        location = "downloads";
+        //TODO
+        //      1- check for location
+        fileName = "video.mp4";
     }
     public void startDownloading(String url)
     {
@@ -21,9 +25,10 @@ public class Downloader {
             // list with all params ti start wget
             ArrayList<String> params = new ArrayList<>(4);
             params.add("Wget/wget.exe");
+            params.add("-O");
+            params.add(location + "/" + fileName);
             params.add("-c");
             params.add(url);
-            params.add(location);
             ProcessBuilder processBuilder = new ProcessBuilder(params);
             processBuilder.redirectErrorStream(true); // for some reason it will not work without it :0
             Process process = processBuilder.start();
@@ -31,8 +36,6 @@ public class Downloader {
             String line;
             //start listening for wget
             while ((line = input.readLine()) != null) {
-                //TODO
-                //      1- trigger listeners up here
                Progress progress = parseProgress(line);
                if (progress != null)
                 for (ProgressListener progressListener: progressListeners
@@ -43,6 +46,8 @@ public class Downloader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //TODO
+        //      1- trigger the on finish listener
     }
     private Progress parseProgress(String s)
     {
@@ -68,7 +73,25 @@ public class Downloader {
         return location;
     }
 
+    /**
+     * set Folder download Location
+     * u can use folder absolute or relative location
+     * if folder doesn't exist it will be created automatically
+     * @param location ex: downloads/videos
+     */
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    /**
+     * specify file name with extension
+     * @param fileName ex: example.mp4
+     */
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

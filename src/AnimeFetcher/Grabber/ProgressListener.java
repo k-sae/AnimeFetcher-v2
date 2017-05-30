@@ -5,4 +5,5 @@ package AnimeFetcher.Grabber;
  */
 public interface ProgressListener {
     void reportProgress(Progress progress);
+    void onFinish();
 }
