@@ -1,5 +1,7 @@
 package AnimeFetcher.Grabber;
 
+import AnimeFetcher.Model.FileManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,13 +16,12 @@ public class Downloader {
     private String fileName;
     public Downloader() {
         progressListeners = new ArrayList<>();
-        location = "downloads";
-        //TODO
-        //      1- check for location
+        location = "downloads/file/folder/test";
         fileName = "video.mp4";
     }
     public void startDownloading(String url)
     {
+        FileManager.getInstance().createFolder(location);
         try {
             // list with all params ti start wget
             ArrayList<String> params = new ArrayList<>(4);
