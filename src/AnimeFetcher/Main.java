@@ -4,6 +4,7 @@ import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
 import AnimeFetcher.Grabber.JSParser;
 import AnimeFetcher.Grabber.Progress;
 import AnimeFetcher.Grabber.ProgressListener;
+import AnimeFetcher.View.MainFrame;
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.JavaMethod;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -15,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = new GridPane();
+        Parent root = new MainFrame();
         primaryStage.setTitle("Anime Fetcher");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();

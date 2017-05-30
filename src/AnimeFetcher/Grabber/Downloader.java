@@ -48,6 +48,10 @@ public class Downloader {
         }
         //TODO
         //      1- trigger the on finish listener
+        for ( ProgressListener progressListener: progressListeners
+             ) {
+            progressListener.onFinish();
+        }
     }
     private Progress parseProgress(String s)
     {
