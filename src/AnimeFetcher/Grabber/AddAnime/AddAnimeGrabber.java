@@ -1,17 +1,12 @@
 package AnimeFetcher.Grabber.AddAnime;
 
 import AnimeFetcher.Grabber.CorruptedDataException;
-import AnimeFetcher.Grabber.Downloader;
+import AnimeFetcher.Grabber.Downloader.Downloader;
 import AnimeFetcher.Grabber.Grabber;
 import AnimeFetcher.Grabber.JSParser;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
-import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 
 /**

@@ -1,4 +1,4 @@
-package AnimeFetcher.Grabber;
+package AnimeFetcher.Grabber.Downloader;
 
 import AnimeFetcher.Model.FileManager;
 
@@ -16,7 +16,7 @@ public class Downloader {
     private String fileName;
     public Downloader() {
         progressListeners = new ArrayList<>();
-        location = "downloads/file/folder/test";
+        location = "downloads";
         fileName = "video.mp4";
     }
     public void startDownloading(String url)

@@ -21,11 +21,12 @@ public class MainFrame extends GridPane {
         RowConstraints rowConstraints = new RowConstraints();
         rowConstraints.setPercentHeight(100);
         getRowConstraints().addAll(new RowConstraints(100), rowConstraints);
-//        StackPane stackPane = new StackPane();
-//        stackPane.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
-//        StackPane stackPane2 = new StackPane();
-//        stackPane2.setBackground(new Background(new BackgroundFill(Color.valueOf("#0f0"), CornerRadii.EMPTY, Insets.EMPTY)));
-
+        StackPane stackPane = new StackPane();
+        stackPane.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
+        AddAnimeViewer stackPane2 = new AddAnimeViewer();
+        stackPane2.setBackground(new Background(new BackgroundFill(Color.valueOf("#0f0"), CornerRadii.EMPTY, Insets.EMPTY)));
+        add(stackPane, 1,0);
+        add(stackPane2, 1,1);
     }
     private void addTabsPane()
     {

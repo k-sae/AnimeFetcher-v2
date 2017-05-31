@@ -1,4 +1,4 @@
-package AnimeFetcher.Grabber;
+package AnimeFetcher.Grabber.Downloader;
 
 /**
  * Created by kemo on 29/05/2017.
