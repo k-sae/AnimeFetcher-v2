@@ -32,7 +32,7 @@ public class Main extends Application {
             public void onFinish() {
             }
         });
-        addAnimeGrabber.startGrabbing();
+//        addAnimeGrabber.startGrabbing();
 
     }
 
