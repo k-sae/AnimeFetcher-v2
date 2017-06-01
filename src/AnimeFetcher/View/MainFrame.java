@@ -7,31 +7,56 @@ import javafx.scene.paint.Color;
 /**
  * Created by kemo on 30/05/2017.
  */
-public class MainFrame extends GridPane {
+
+/** UI VISUAL TREE
+ *                  VBox    | -> HBox (title bar) 
+ *                          | -> HBox (content) | -> vBox
+ *                                              | -> Pane (anime Content pane)
+ */
+public class MainFrame extends VBox {
+    private final int LEFT_TABS_SIZE = 200;
+    private HBox animeContentPane;
     public MainFrame()
     {
          setBackground(new Background(new BackgroundFill(Color.valueOf("#000"), CornerRadii.EMPTY, Insets.EMPTY)));
-         setConstrains();
+         setTitleBar();
+         setContent();
          addTabsPane();
+         setAnimeContentPane(new AddAnimeViewer());
     }
     private void setConstrains(){
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPercentWidth(100);
-        getColumnConstraints().addAll(new ColumnConstraints(150), columnConstraints);
-        RowConstraints rowConstraints = new RowConstraints();
-        rowConstraints.setPercentHeight(100);
-        getRowConstraints().addAll(new RowConstraints(100), rowConstraints);
-        StackPane stackPane = new StackPane();
-        stackPane.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
-        AddAnimeViewer stackPane2 = new AddAnimeViewer();
-        stackPane2.setBackground(new Background(new BackgroundFill(Color.valueOf("#0f0"), CornerRadii.EMPTY, Insets.EMPTY)));
-        add(stackPane, 1,0);
-        add(stackPane2, 1,1);
+//        StackPane stackPane = new StackPane();
+//        stackPane.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
+//        AddAnimeViewer stackPane2 = new AddAnimeViewer();
+//        stackPane2.setBackground(new Background(new BackgroundFill(Color.valueOf("#0f0"), CornerRadii.EMPTY, Insets.EMPTY)));
+//        add(stackPane, 1,0);
+//        add(stackPane2, 1,1);
+    }
+    private void setTitleBar()
+    {
+        HBox hBox = new HBox();
+        hBox.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox.setMinHeight(80);
+        getChildren().add(hBox);
+    }
+
+    private void setContent()
+    {
+        animeContentPane = new HBox();
+        VBox.setVgrow(animeContentPane, Priority.ALWAYS);
+        getChildren().add(animeContentPane);
     }
     private void addTabsPane()
     {
-        StackPane stackPane3 = new StackPane();
-        stackPane3.setBackground(new Background(new BackgroundFill(Color.valueOf("#00f"), CornerRadii.EMPTY, Insets.EMPTY)));
-        add(stackPane3, 0,1);
+        VBox vBox = new VBox();
+        vBox.setBackground(new Background(new BackgroundFill(Color.valueOf("#0f0"), CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox.setMinWidth(LEFT_TABS_SIZE);
+        animeContentPane.getChildren().add(vBox);
     }
+    private void setAnimeContentPane(Pane content)
+    {
+        HBox.setHgrow(content, Priority.ALWAYS);
+        animeContentPane.getChildren().add(content);
+    }
+
 }

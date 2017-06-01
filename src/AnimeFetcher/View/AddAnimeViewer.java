@@ -97,11 +97,11 @@ public class AddAnimeViewer extends GridPane implements EventHandler<MouseEvent>
         startEp = initNumericTextField();
         endEp = initNumericTextField();
         HBox lHBox = new HBox();
+        HBox.setHgrow(endEp,Priority.ALWAYS);
+        HBox.setHgrow(startEp,Priority.ALWAYS);
         lHBox.getChildren().addAll(animeList,startEp,endEp);
-        BorderPane borderPane = new BorderPane();
-        borderPane.setLeft(lHBox);
-        GridPane.setMargin(borderPane, new Insets(MARGIN_VALUE));
-        add(borderPane,0,0);
+        GridPane.setMargin(lHBox, new Insets(MARGIN_VALUE));
+        add(lHBox,0,0);
 //        gridPane.add(animeList,0,0);
 //        add(gridPane,0,0);
 //        gridPane.add(startEp,1,0);
@@ -110,7 +110,7 @@ public class AddAnimeViewer extends GridPane implements EventHandler<MouseEvent>
     private NumericTextField initNumericTextField()
     {
         NumericTextField child = new NumericTextField();
-        child.setPrefWidth(50);
+//        child.setPrefWidth(50);
         HBox.setMargin(child,new Insets(0,0,0,10));
         return child;
     }
