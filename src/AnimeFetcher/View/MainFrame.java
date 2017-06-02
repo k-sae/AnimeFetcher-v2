@@ -1,5 +1,7 @@
 package AnimeFetcher.View;
 
+import AnimeFetcher.View.ThemeManager.DarkTheme;
+import AnimeFetcher.View.ThemeManager.ThemeManager;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -9,33 +11,27 @@ import javafx.scene.paint.Color;
  */
 
 /** UI VISUAL TREE
- *                  VBox    | -> HBox (title bar) 
+ *                  VBox    | -> HBox (title bar)
  *                          | -> HBox (content) | -> vBox
  *                                              | -> Pane (anime Content pane)
  */
 public class MainFrame extends VBox {
     private final int LEFT_TABS_SIZE = 200;
     private HBox animeContentPane;
+    private static ThemeManager themeManager;
     public MainFrame()
     {
+        themeManager = new DarkTheme();
          setBackground(new Background(new BackgroundFill(Color.valueOf("#000"), CornerRadii.EMPTY, Insets.EMPTY)));
          setTitleBar();
          setContent();
          addTabsPane();
          setAnimeContentPane(new AddAnimeViewer());
     }
-    private void setConstrains(){
-//        StackPane stackPane = new StackPane();
-//        stackPane.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
-//        AddAnimeViewer stackPane2 = new AddAnimeViewer();
-//        stackPane2.setBackground(new Background(new BackgroundFill(Color.valueOf("#0f0"), CornerRadii.EMPTY, Insets.EMPTY)));
-//        add(stackPane, 1,0);
-//        add(stackPane2, 1,1);
-    }
     private void setTitleBar()
     {
         HBox hBox = new HBox();
-        hBox.setBackground(new Background(new BackgroundFill(Color.valueOf("#f00"), CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox.setBackground(new Background(new BackgroundFill(Color.valueOf(themeManager.getTitleBarBackground()), CornerRadii.EMPTY, Insets.EMPTY)));
         hBox.setMinHeight(80);
         getChildren().add(hBox);
     }
@@ -58,5 +54,8 @@ public class MainFrame extends VBox {
         HBox.setHgrow(content, Priority.ALWAYS);
         animeContentPane.getChildren().add(content);
     }
-
+    public static ThemeManager getDefaultThemeManager()
+    {
+        return themeManager;
+    }
 }

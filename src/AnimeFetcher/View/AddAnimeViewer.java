@@ -18,47 +18,25 @@ import javafx.scene.paint.Color;
  */
 
 /** UI VISUAL TREE
- *                  GridPane    | row1 -> BorderPane |  left    -> HBox     | -> ComboBox anime_list
+ *                  VBox    |  BorderPane   |  left    -> HBox     | -> ComboBox anime_list
  *                                                                          | -> NumericTextFiend startEp
  *                                                                          | -> NumericTextFiend endEp
  *
- *                                                   |  Right   -> HBox     | -> Button Download_btn
- *                              | row2 ->
+ *                                          |  Right   -> HBox     | -> Button Download_btn
+                            |
  *
  */
-public class AddAnimeViewer extends GridPane implements EventHandler<MouseEvent> {
+public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
     public AddAnimeViewer() {
-        setConstrains();
         initializePrompts();
+       setBackground(new Background(new BackgroundFill(Color.valueOf("#ff0"), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     private ComboBox<AddAnimeAnime> animeList;
     private NumericTextField startEp;
     private NumericTextField endEp;
-    private final int MARGIN_VALUE = 5;
-    private void setConstrains() {
-        final int SIZE = 4;
-        for (int i = 0; i < SIZE ; i++) {
-            getRowConstraints().addAll(new RowConstraints());
-        }
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPercentWidth(100);
-        getColumnConstraints().add(columnConstraints);
-
-    }
-    private void setLayout()
-    {
-
-    }
+    private final int MARGIN_VALUE = 10;
     private void initializePrompts()
     {
-//        final int NO_OF_ITEMS  = 4;
-//        GridPane gridPane = new GridPane();
-//        for (int i = 0; i < NO_OF_ITEMS; i++) {
-//            ColumnConstraints columnConstraints = new ColumnConstraints();
-//            columnConstraints.setPercentWidth(100 / NO_OF_ITEMS);
-//            gridPane.getColumnConstraints().add(columnConstraints);
-//        }
-
         animeList = new ComboBox<>();
         animeList.getItems().add(new AddAnimeAnime("one piece", "123"));
         animeList.getItems().add(new AddAnimeAnime("one", "123"));
@@ -97,20 +75,14 @@ public class AddAnimeViewer extends GridPane implements EventHandler<MouseEvent>
         startEp = initNumericTextField();
         endEp = initNumericTextField();
         HBox lHBox = new HBox();
-        HBox.setHgrow(endEp,Priority.ALWAYS);
-        HBox.setHgrow(startEp,Priority.ALWAYS);
         lHBox.getChildren().addAll(animeList,startEp,endEp);
-        GridPane.setMargin(lHBox, new Insets(MARGIN_VALUE));
-        add(lHBox,0,0);
-//        gridPane.add(animeList,0,0);
-//        add(gridPane,0,0);
-//        gridPane.add(startEp,1,0);
-//        gridPane.add(endEp,2,0);
+        VBox.setMargin(lHBox, new Insets(MARGIN_VALUE));
+        getChildren().add(lHBox);
     }
     private NumericTextField initNumericTextField()
     {
         NumericTextField child = new NumericTextField();
-//        child.setPrefWidth(50);
+        child.setPrefWidth(50);
         HBox.setMargin(child,new Insets(0,0,0,10));
         return child;
     }
