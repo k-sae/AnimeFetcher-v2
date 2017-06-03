@@ -18,10 +18,10 @@ public class DarkTheme extends ThemeManager {
         setAnimeActiveBarForeground("#000");
 
         //AnimeContent
-        setAnimeWebsiteContent("#444");
+        setAnimeWebsiteContent("#222");
 
         //input prompts
-        setInputPromptBackground("#555");
+        setInputPromptBackground("#666");
         setInputPromptForeground("#fff");
 
         //Button

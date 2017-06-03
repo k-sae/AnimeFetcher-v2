@@ -1,7 +1,7 @@
 package AnimeFetcher.View;
 
-import AnimeFetcher.View.ThemeManager.DarkTheme;
-import AnimeFetcher.View.ThemeManager.ThemeManager;
+import AnimeFetcher.Main;
+import AnimeFetcher.View.AddAnime.AddAnimeViewer;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -18,10 +18,10 @@ import javafx.scene.paint.Color;
 public class MainFrame extends VBox {
     private final int LEFT_TABS_SIZE = 200;
     private HBox animeContentPane;
-    private static ThemeManager themeManager;
+
     public MainFrame()
     {
-        themeManager = new DarkTheme();
+
          setBackground(new Background(new BackgroundFill(Color.valueOf("#000"), CornerRadii.EMPTY, Insets.EMPTY)));
          setTitleBar();
          setContent();
@@ -31,7 +31,7 @@ public class MainFrame extends VBox {
     private void setTitleBar()
     {
         HBox hBox = new HBox();
-        hBox.setBackground(new Background(new BackgroundFill(Color.valueOf(themeManager.getTitleBarBackground()), CornerRadii.EMPTY, Insets.EMPTY)));
+        hBox.setBackground(new Background(new BackgroundFill(Color.valueOf(Main.getThemeManager().getTitleBarBackground()), CornerRadii.EMPTY, Insets.EMPTY)));
         hBox.setMinHeight(80);
         getChildren().add(hBox);
     }
@@ -53,9 +53,5 @@ public class MainFrame extends VBox {
     {
         HBox.setHgrow(content, Priority.ALWAYS);
         animeContentPane.getChildren().add(content);
-    }
-    public static ThemeManager getDefaultThemeManager()
-    {
-        return themeManager;
     }
 }
