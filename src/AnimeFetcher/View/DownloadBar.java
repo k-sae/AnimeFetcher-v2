@@ -6,6 +6,7 @@ import AnimeFetcher.Grabber.Downloader.ProgressListener;
 import AnimeFetcher.Main;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -33,13 +34,17 @@ public class DownloadBar extends HBox implements ProgressListener {
         percentage = new Label("0%");
         timeRemaining = new Label("0m");
         fileName = new Label(downloader.getFileName());
-        speed = new Label("0kb");
+        speed = new Label("0kb/s");
     }
     private void setLayout()
     {
         progressBar.setBackground(new Background(new BackgroundFill(Color.valueOf("#fff"), CornerRadii.EMPTY, Insets.EMPTY)));
         HBox.setHgrow(progressBar, Priority.ALWAYS);
         getChildren().addAll(fileName, percentage, progressBar, timeRemaining, speed);
+        for (Node node: getChildren()
+             ) {
+            HBox.setMargin(node, new Insets(5));
+        }
     }
 
     @Override
@@ -49,6 +54,8 @@ public class DownloadBar extends HBox implements ProgressListener {
             public void run() {
                 progressBar.setProgress(Double.valueOf(progress.getPercentage().split("%")[0])/100);
                 percentage.setText(progress.getPercentage());
+                speed.setText(progress.getSpeed());
+                timeRemaining.setText(progress.getTimeRemaining() + "/s");
             }
         });
     }

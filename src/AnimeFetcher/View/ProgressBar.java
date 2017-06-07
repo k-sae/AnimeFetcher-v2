@@ -31,11 +31,10 @@ public class ProgressBar extends HBox implements ChangeListener<Number> {
         this.progress = progress;
         progressIndicator.setPrefWidth(widthProperty().get() * progress);
     }
-
-    public Pane getProgressIndicator() {
-        return progressIndicator;
+    public void setProgressIndicatorColor(Color color)
+    {
+        progressIndicator.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
-
     @Override
     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
         progressIndicator.setPrefWidth(newValue.doubleValue() * progress);
