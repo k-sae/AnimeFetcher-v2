@@ -1,7 +1,11 @@
 package AnimeFetcher.View.AddAnime;
 
+import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
+import AnimeFetcher.Grabber.Downloader.Progress;
+import AnimeFetcher.Grabber.Downloader.ProgressListener;
 import AnimeFetcher.Main;
 import AnimeFetcher.Model.AddAnimeAnime;
+import AnimeFetcher.View.DownloadBar;
 import AnimeFetcher.View.NumericTextField;
 import AnimeFetcher.View.SearchBar;
 import javafx.application.Platform;
@@ -35,9 +39,25 @@ import java.util.List;
  *
  */
 public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
+    AddAnimeGrabber addAnimeGrabber;
     public AddAnimeViewer() {
         initializePrompts();
        setBackground(new Background(new BackgroundFill(Color.valueOf(Main.getThemeManager().getAnimeWebsiteContent()), CornerRadii.EMPTY, Insets.EMPTY)));
+        addAnimeGrabber = new AddAnimeGrabber();
+        addAnimeGrabber.enQueueAnimeLink("http://add-anime.net/video/82AD3YD7ONBN/One-Piece-790");
+        addAnimeGrabber.enQueueAnimeLink("http://add-anime.net/video/HOGXY9SMAXD4/One-Piece-399");
+        addAnimeGrabber.getDownloader().addProgressListener(new ProgressListener() {
+            @Override
+            public void reportProgress(Progress progress) {
+                System.out.println(progress.getPercentage());
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        });
+        addAnimeGrabber.startGrabbing();
+        addDownloadBar();
     }
     private SearchBar<AddAnimeAnime> animeList;
     private NumericTextField startEp;
@@ -83,6 +103,11 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
                         Insets.EMPTY)));
         child.setStyle("-fx-text-inner-color: " + Main.getThemeManager().getInputPromptForeground() + ";" );
         return child;
+    }
+    private void addDownloadBar()
+    {
+        DownloadBar downloadBar = new DownloadBar(addAnimeGrabber.getDownloader());
+        getChildren().add(downloadBar);
     }
 
     @Override
