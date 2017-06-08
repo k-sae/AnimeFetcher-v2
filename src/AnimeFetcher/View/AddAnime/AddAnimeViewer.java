@@ -5,25 +5,20 @@ import AnimeFetcher.Grabber.Downloader.Progress;
 import AnimeFetcher.Grabber.Downloader.ProgressListener;
 import AnimeFetcher.Main;
 import AnimeFetcher.Model.AddAnimeAnime;
+import AnimeFetcher.Model.Anime;
 import AnimeFetcher.View.DownloadBar;
 import AnimeFetcher.View.NumericTextField;
 import AnimeFetcher.View.SearchBar;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kemo on 31/05/2017.
@@ -44,18 +39,6 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
         initializePrompts();
        setBackground(new Background(new BackgroundFill(Color.valueOf(Main.getThemeManager().getAnimeWebsiteContent()), CornerRadii.EMPTY, Insets.EMPTY)));
         addAnimeGrabber = new AddAnimeGrabber();
-        addAnimeGrabber.enQueueAnimeLink("http://add-anime.net/video/82AD3YD7ONBN/One-Piece-790");
-        addAnimeGrabber.enQueueAnimeLink("http://add-anime.net/video/HOGXY9SMAXD4/One-Piece-399");
-        addAnimeGrabber.getDownloader().addProgressListener(new ProgressListener() {
-            @Override
-            public void reportProgress(Progress progress) {
-                System.out.println(progress.getPercentage());
-            }
-
-            @Override
-            public void onFinish() {
-            }
-        });
 //        addAnimeGrabber.startGrabbing();
         addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
@@ -65,8 +48,6 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
     private NumericTextField startEp;
     private NumericTextField endEp;
     private final int MARGIN_VALUE = 10;
-    private ArrayList<AddAnimeAnime> addAnimeAnimes;
-    private boolean isSelectedAnime;
     private void initializePrompts()
     {
         animeList = new SearchBar<>();
@@ -87,7 +68,7 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
     }
     private NumericTextField initNumericTextField()
     {
-        NumericTextField child = new NumericTextField();
+        NumericTextField child = new NumericTextField("1");
         child.setPrefWidth(50);
         HBox.setMargin(child,new Insets(0,0,0,10));
         child.setBackground(new Background
@@ -106,7 +87,27 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
     @Override
     public void handle(MouseEvent event) {
         //TODO
-        System.out.println(animeList.getSelectedItem() != null ? animeList.getSelectedItem().getId() : "null :)");
+        AddAnimeAnime addAnimeAnime = animeList.getSelectedItem();
+        int endEpNo = Integer.valueOf(endEp.getText());
+        int startEpNo = Integer.valueOf(startEp.getText());
+        for (int i = startEpNo; i <= endEpNo ; i++){
+            //Remove this from her
+            addAnimeAnime.setUrl("http://add-anime.net/next_episode.php?last=" + getEpisodeNo(i - 1) + "&cat=" +addAnimeAnime.getId() + ",");
+            addAnimeGrabber.enQueueAnimeLink(new Anime(addAnimeAnime.getName(), addAnimeAnime.getUrl(), i +""));
+        }
+        addAnimeGrabber.startGrabbing();
+    }
+    private String getEpisodeNo(int num)
+    {
+        if (num < 10)
+        {
+            return "00" + num;
+        }
+        else if(num < 100)
+        {
+            return  "0" + num;
+        }
+        else return num + "";
     }
 
     @Override

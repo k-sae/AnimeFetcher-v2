@@ -1,5 +1,7 @@
 package AnimeFetcher.Grabber;
 
+import AnimeFetcher.Model.Anime;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,40 +14,41 @@ import java.util.ArrayList;
  * Created by kareem on 30/03/17.
  */
 public abstract class Grabber {
-    private ArrayList<String> animeLinks;
+    private ArrayList<Anime> animes;
     private int retryAfter;
-    public Grabber(ArrayList<String> animeLinks) {
-        this.animeLinks = animeLinks;
+    public Grabber(ArrayList<Anime> animes) {
+        this.animes = animes;
     }
     public Grabber()
     {
-        animeLinks = new ArrayList<>();
+        animes = new ArrayList<>();
     }
     @SuppressWarnings("WeakerAccess")
-    public ArrayList<String> getAnimeLinks() {
-        return animeLinks;
+    public ArrayList<Anime> getAnimes() {
+        return animes;
     }
    /**
-        @param link the link to the desired website
+        @param anime the link to the desired website
      */
-    public void enQueueAnimeLink(String link)
+    public void enQueueAnimeLink(Anime anime)
     {
-        animeLinks.add(link);
+        animes.add(anime);
     }
-    private String deQueueAnimeLink()
+    private Anime deQueueAnimeLink()
     {
-       String link = animeLinks.get(0);
-       animeLinks.remove(0);
+        Anime link = animes.get(0);
+       animes.remove(0);
        return link;
     }
     /** start Grabbing */
     public void startGrabbing()
     {
         new Thread(() -> {
-            while (animeLinks.size() != 0) {
+            while (animes.size() != 0) {
                 try {
                     //do it in two steps so when an exception is thrown no data is lost
-                    analyze(getWebsiteData( deQueueAnimeLink()));
+                    Anime anime = deQueueAnimeLink();
+                    analyze(getWebsiteData(anime.getUrl()), anime);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -65,7 +68,7 @@ public abstract class Grabber {
      * @param websiteData data resulted after de
      * @throws CorruptedDataException to request redownloading the website
      */
-    protected abstract void analyze(String websiteData) throws CorruptedDataException;
+    protected abstract void analyze(String websiteData, Anime anime) throws CorruptedDataException;
 
     /**
      @throws IOException if connection error or empty response or whatever

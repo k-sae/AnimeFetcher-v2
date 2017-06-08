@@ -56,7 +56,6 @@ public class SearchBar<T> extends ComboBox<T> implements ChangeListener<String>,
     @Override
     public void handle(ActionEvent event) {
         isChecked = true;
-        System.out.println(getSelectionModel().getSelectedIndex());
     }
 
     private void updateSearchItemsWithTokens(String token)

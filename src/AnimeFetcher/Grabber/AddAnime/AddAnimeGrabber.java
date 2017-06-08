@@ -5,6 +5,7 @@ import AnimeFetcher.Grabber.Downloader.Downloader;
 import AnimeFetcher.Grabber.Grabber;
 import AnimeFetcher.Grabber.JSParser;
 import AnimeFetcher.Model.AddAnimeAnime;
+import AnimeFetcher.Model.Anime;
 import javafx.beans.value.ChangeListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,14 +44,16 @@ import java.util.ArrayList;
 // i think this should be singleton
     // decide later :)
 public class AddAnimeGrabber extends Grabber {
-    public AddAnimeGrabber(ArrayList<String> animeLink) {
-        super(animeLink);
+    public AddAnimeGrabber(ArrayList<Anime> animes) {
+        super(animes);
     }
     private VideoType videoType;
     private boolean isInProgress;
     private Downloader downloader;
     private ArrayList<AddAnimeAnime> addAnimeAnimes;
     private ArrayList<ChangeListener<ArrayList<AddAnimeAnime>>> changeListeners;
+    private String animeName;
+    private int startEp;
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
         downloader = new Downloader();
@@ -66,7 +69,7 @@ public class AddAnimeGrabber extends Grabber {
     {
         Grabber grabber = new Grabber() {
             @Override
-            protected void analyze(String websiteData) throws CorruptedDataException {
+            protected void analyze(String websiteData, Anime anime) throws CorruptedDataException {
                 addAnimeAnimes.clear();
                 Document document = Jsoup.parse(websiteData);
                 Elements s = document.select("form").last().select("select").first().select("option");
@@ -90,13 +93,13 @@ public class AddAnimeGrabber extends Grabber {
                 return null;
             }
         };
-        grabber.enQueueAnimeLink("http://add-anime.net/");
+        grabber.enQueueAnimeLink(new Anime("http://add-anime.net/"));
         grabber.startGrabbing();
     }
     @Override
-    protected void analyze(String websiteData)  throws CorruptedDataException {
-        System.out.println(websiteData);
+    protected void analyze(String websiteData, Anime anime)  throws CorruptedDataException {
         JSParser jsParser = new JSParser(websiteData);
+        downloader.setFileName(anime.getName() + "-" + anime.getEpNo() + ".mp4");
         if (videoType == VideoType.HighQuality) {
             downloader.startDownloading(jsParser.pickVariable("hq_video_file"));
         }
@@ -133,5 +136,21 @@ public class AddAnimeGrabber extends Grabber {
 
     public Downloader getDownloader() {
         return downloader;
+    }
+
+    public int getStartEp() {
+        return startEp;
+    }
+
+    public void setStartEp(int startEp) {
+        this.startEp = startEp;
+    }
+
+    public String getAnimeName() {
+        return animeName;
+    }
+
+    public void setAnimeName(String animeName) {
+        this.animeName = animeName;
     }
 }

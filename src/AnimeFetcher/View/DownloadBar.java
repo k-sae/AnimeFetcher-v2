@@ -40,6 +40,8 @@ public class DownloadBar extends HBox implements ProgressListener {
     {
         progressBar.setBackground(new Background(new BackgroundFill(Color.valueOf("#fff"), CornerRadii.EMPTY, Insets.EMPTY)));
         HBox.setHgrow(progressBar, Priority.ALWAYS);
+        timeRemaining.setPrefWidth(50);
+        speed.setPrefWidth(50);
         getChildren().addAll(fileName, percentage, progressBar, timeRemaining, speed);
         for (Node node: getChildren()
              ) {
@@ -54,14 +56,15 @@ public class DownloadBar extends HBox implements ProgressListener {
             public void run() {
                 progressBar.setProgress(Double.valueOf(progress.getPercentage().split("%")[0])/100);
                 percentage.setText(progress.getPercentage());
-                speed.setText(progress.getSpeed());
-                timeRemaining.setText(progress.getTimeRemaining() + "/s");
+                speed.setText(progress.getSpeed() + "/s");
+                timeRemaining.setText(progress.getTimeRemaining());
+                fileName.setText(downloader.getFileName());
             }
         });
     }
 
     @Override
     public void onFinish() {
-
+        System.out.println("Finished");
     }
 }
