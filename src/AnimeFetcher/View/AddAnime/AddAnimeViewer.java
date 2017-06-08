@@ -38,7 +38,7 @@ import java.util.List;
                             |
  *
  */
-public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
+public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, ChangeListener<ArrayList<AddAnimeAnime>> {
     AddAnimeGrabber addAnimeGrabber;
     public AddAnimeViewer() {
         initializePrompts();
@@ -57,6 +57,7 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
             }
         });
 //        addAnimeGrabber.startGrabbing();
+        addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
         addDownloadBar();
     }
@@ -68,17 +69,8 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
     private boolean isSelectedAnime;
     private void initializePrompts()
     {
-        addAnimeAnimes = new ArrayList<>();
         animeList = new SearchBar<>();
-        addAnimeAnimes.add(new AddAnimeAnime("one", "124"));
-        addAnimeAnimes.add(new AddAnimeAnime("one piece", "123"));
-        addAnimeAnimes.add(new AddAnimeAnime("ran shit 1", "123"));
-        addAnimeAnimes.add(new AddAnimeAnime("rand shit 2", "123"));
-        addAnimeAnimes.add(new AddAnimeAnime("one", "124"));
-        addAnimeAnimes.add(new AddAnimeAnime("one piece", "123"));
-        addAnimeAnimes.add(new AddAnimeAnime("ran shit 1", "123"));
-        addAnimeAnimes.add(new AddAnimeAnime("rand shit 2", "123"));
-        animeList.setSearchItems(addAnimeAnimes);
+        animeList.setMaxWidth(200);
         startEp = initNumericTextField();
         endEp = initNumericTextField();
         HBox lHBox = new HBox();
@@ -115,5 +107,10 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
     public void handle(MouseEvent event) {
         //TODO
         System.out.println(animeList.getSelectedItem() != null ? animeList.getSelectedItem().getId() : "null :)");
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends ArrayList<AddAnimeAnime>> observable, ArrayList<AddAnimeAnime> oldValue, ArrayList<AddAnimeAnime> newValue) {
+        animeList.setSearchItems(newValue);
     }
 }

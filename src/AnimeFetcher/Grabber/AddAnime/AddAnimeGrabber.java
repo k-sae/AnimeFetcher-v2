@@ -5,6 +5,7 @@ import AnimeFetcher.Grabber.Downloader.Downloader;
 import AnimeFetcher.Grabber.Grabber;
 import AnimeFetcher.Grabber.JSParser;
 import AnimeFetcher.Model.AddAnimeAnime;
+import javafx.beans.value.ChangeListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -49,9 +50,11 @@ public class AddAnimeGrabber extends Grabber {
     private boolean isInProgress;
     private Downloader downloader;
     private ArrayList<AddAnimeAnime> addAnimeAnimes;
+    private ArrayList<ChangeListener<ArrayList<AddAnimeAnime>>> changeListeners;
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
         downloader = new Downloader();
+        changeListeners = new ArrayList<>();
         // i have used this initial value to prevent the recreation of array many times
         //as iam sure the anime list will exceeds this value
         //TODO
@@ -69,6 +72,10 @@ public class AddAnimeGrabber extends Grabber {
                 for (int i = 0; i < s.size(); i++) {
                     Element element = s.get(i);
                     addAnimeAnimes.add(new AddAnimeAnime(element.attr("label"),element.attr("value" )));
+                }
+                for (ChangeListener<ArrayList<AddAnimeAnime>> arrayListChangeListener: changeListeners
+                     ) {
+                    arrayListChangeListener.changed(null,null, addAnimeAnimes);
                 }
             }
 
@@ -106,6 +113,10 @@ public class AddAnimeGrabber extends Grabber {
             e.printStackTrace();
         }
         return null;
+    }
+    public void setOnListChangeListener(ChangeListener<ArrayList<AddAnimeAnime>> changeListener)
+    {
+        changeListeners.add(changeListener);
     }
 
     public VideoType getVideoType() {
