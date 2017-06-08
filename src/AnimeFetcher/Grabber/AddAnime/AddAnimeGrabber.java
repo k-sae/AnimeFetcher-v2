@@ -55,6 +55,7 @@ public class AddAnimeGrabber extends Grabber {
         videoType = VideoType.HighQuality;
         downloader = new Downloader();
         changeListeners = new ArrayList<>();
+        isInProgress = false;
         // i have used this initial value to prevent the recreation of array many times
         //as iam sure the anime list will exceeds this value
         //TODO
