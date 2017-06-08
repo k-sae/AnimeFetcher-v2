@@ -56,7 +56,8 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent> {
             public void onFinish() {
             }
         });
-        addAnimeGrabber.startGrabbing();
+//        addAnimeGrabber.startGrabbing();
+        addAnimeGrabber.updateAnimeList();
         addDownloadBar();
     }
     private SearchBar<AddAnimeAnime> animeList;
