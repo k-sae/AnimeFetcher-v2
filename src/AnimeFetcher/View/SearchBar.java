@@ -62,6 +62,7 @@ public class SearchBar<T> extends ComboBox<T> implements ChangeListener<String>,
     private void updateSearchItemsWithTokens(String token)
     {
         items.clear();
+        if (searchItems == null) return;
         for (int i = 0; i < searchItems.size() ; i++) {
             if (searchItems.get(i).toString().contains(token))
             {
