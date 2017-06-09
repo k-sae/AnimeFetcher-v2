@@ -1,4 +1,4 @@
-package AnimeFetcher.View;
+package AnimeFetcher.View.HelperUIComponents;
 
 import com.sun.tracing.dtrace.FunctionName;
 import javafx.application.Platform;

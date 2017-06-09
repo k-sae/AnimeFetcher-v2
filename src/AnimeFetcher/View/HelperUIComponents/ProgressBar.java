@@ -1,4 +1,4 @@
-package AnimeFetcher.View;
+package AnimeFetcher.View.HelperUIComponents;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

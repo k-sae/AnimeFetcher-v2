@@ -1,14 +1,12 @@
 package AnimeFetcher.View.AddAnime;
 
 import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
-import AnimeFetcher.Grabber.Downloader.Progress;
-import AnimeFetcher.Grabber.Downloader.ProgressListener;
 import AnimeFetcher.Main;
 import AnimeFetcher.Model.AddAnimeAnime;
 import AnimeFetcher.Model.Anime;
 import AnimeFetcher.View.DownloadBar;
-import AnimeFetcher.View.NumericTextField;
-import AnimeFetcher.View.SearchBar;
+import AnimeFetcher.View.HelperUIComponents.NumericTextField;
+import AnimeFetcher.View.HelperUIComponents.SearchBar;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -39,7 +37,6 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
         initializePrompts();
        setBackground(new Background(new BackgroundFill(Color.valueOf(Main.getThemeManager().getAnimeWebsiteContent()), CornerRadii.EMPTY, Insets.EMPTY)));
         addAnimeGrabber = new AddAnimeGrabber();
-//        addAnimeGrabber.startGrabbing();
         addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
         addDownloadBar();

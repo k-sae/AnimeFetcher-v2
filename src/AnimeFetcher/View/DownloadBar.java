@@ -3,7 +3,7 @@ package AnimeFetcher.View;
 import AnimeFetcher.Grabber.Downloader.Downloader;
 import AnimeFetcher.Grabber.Downloader.Progress;
 import AnimeFetcher.Grabber.Downloader.ProgressListener;
-import AnimeFetcher.Main;
+import AnimeFetcher.View.HelperUIComponents.ProgressBar;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
