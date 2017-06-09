@@ -18,6 +18,7 @@ public class Downloader {
         progressListeners = new ArrayList<>();
         location = "downloads";
         fileName = "video.mp4";
+
     }
     public void startDownloading(String url)
     {
@@ -25,7 +26,7 @@ public class Downloader {
         try {
             // list with all params ti start wget
             ArrayList<String> params = new ArrayList<>(4);
-            params.add("Wget/wget.exe");
+            params.add(getBasicDownloader());
             params.add("-O");
             params.add(location + "/" + fileName);
             params.add("-c");
@@ -54,6 +55,13 @@ public class Downloader {
             progressListener.onFinish();
         }
     }
+
+    private String getBasicDownloader()
+    {
+        String s = System.getProperty("os.name").toLowerCase();
+        if (s.contains("lin")) return "wget";
+        else return "Wget/wget.exe";
+    }
     private Progress parseProgress(String s)
     {
         final String PROGRESS_SCHEMA = ".......... .......... .......... .......... ..........";
@@ -77,6 +85,7 @@ public class Downloader {
     public String getLocation() {
         return location;
     }
+
 
     /**
      * set Folder download Location
