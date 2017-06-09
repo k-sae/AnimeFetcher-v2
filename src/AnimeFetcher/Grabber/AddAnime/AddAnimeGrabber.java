@@ -99,7 +99,7 @@ public class AddAnimeGrabber extends Grabber {
     @Override
     protected void analyze(String websiteData, Anime anime)  throws CorruptedDataException {
         JSParser jsParser = new JSParser(websiteData);
-        downloader.setFileName(anime.getName() + "-" + anime.getEpNo() + ".mp4");
+        downloader.setFileName(anime.getName() + " " + anime.getEpNo() + ".mp4");
         if (videoType == VideoType.HighQuality) {
             downloader.startDownloading(jsParser.pickVariable("hq_video_file"));
         }
