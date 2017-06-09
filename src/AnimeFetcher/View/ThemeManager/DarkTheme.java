@@ -27,5 +27,8 @@ public class DarkTheme extends ThemeManager {
         //Button
         setButtonBackground("#666");
         setButtonForeground("#fff");
+
+        //global
+        setForeground("fff");
     }
 }
