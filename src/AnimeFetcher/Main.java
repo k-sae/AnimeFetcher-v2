@@ -1,8 +1,5 @@
 package AnimeFetcher;
 
-import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
-import AnimeFetcher.Grabber.Downloader.Progress;
-import AnimeFetcher.Grabber.Downloader.ProgressListener;
 import AnimeFetcher.View.MainFrame;
 import AnimeFetcher.View.ThemeManager.DarkTheme;
 import AnimeFetcher.View.ThemeManager.ThemeManager;
@@ -22,7 +19,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = new MainFrame();
         primaryStage.setTitle("Anime Fetcher");
-        primaryStage.setScene(new Scene(root, 700, 400));
+        primaryStage.setScene(new Scene(root, 900, 400));
         primaryStage.show();
         //TODO
         // Saver to test the grabber

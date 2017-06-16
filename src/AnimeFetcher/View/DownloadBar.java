@@ -2,7 +2,7 @@ package AnimeFetcher.View;
 
 import AnimeFetcher.Grabber.Downloader.Downloader;
 import AnimeFetcher.Grabber.Downloader.Progress;
-import AnimeFetcher.Grabber.Downloader.ProgressListener;
+import AnimeFetcher.Grabber.Downloader.DownloadProgressListener;
 import AnimeFetcher.View.HelperUIComponents.ProgressBar;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 /**
  * Created by kemo on 07/06/2017.
  */
-public class DownloadBar extends HBox implements ProgressListener {
+public class DownloadBar extends HBox implements DownloadProgressListener {
     private Downloader downloader;
     private ProgressBar progressBar;
     private Label percentage;
@@ -50,6 +50,16 @@ public class DownloadBar extends HBox implements ProgressListener {
     }
 
     @Override
+    public void onStart() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fileName.setText(downloader.getFileName());
+            }
+        });
+    }
+
+    @Override
     public void reportProgress(Progress progress) {
         Platform.runLater(new Runnable() {
             @Override
@@ -58,13 +68,24 @@ public class DownloadBar extends HBox implements ProgressListener {
                 percentage.setText(progress.getPercentage());
                 speed.setText(progress.getSpeed() + "/s");
                 timeRemaining.setText(progress.getTimeRemaining());
-                fileName.setText(downloader.getFileName());
             }
         });
     }
 
     @Override
     public void onFinish() {
-        System.out.println("Finished");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setProgress(100);
+                percentage.setText("100%");
+                timeRemaining.setText("0s");
+            }
+        });
+    }
+
+    @Override
+    public void onFail() {
+
     }
 }

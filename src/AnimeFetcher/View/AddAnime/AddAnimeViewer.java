@@ -1,6 +1,7 @@
 package AnimeFetcher.View.AddAnime;
 
 import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
+import AnimeFetcher.Grabber.ProgressListener;
 import AnimeFetcher.Main;
 import AnimeFetcher.Model.AddAnimeAnime;
 import AnimeFetcher.Model.Anime;
@@ -36,12 +37,20 @@ import java.util.ArrayList;
                             |
  *
  */
-public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, ChangeListener<ArrayList<AddAnimeAnime>> {
+public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, ChangeListener<ArrayList<AddAnimeAnime>>{
     AddAnimeGrabber addAnimeGrabber;
     public AddAnimeViewer() {
         initializePrompts();
        setBackground(new Background(new BackgroundFill(Color.valueOf(Main.getThemeManager().getAnimeWebsiteContent()), CornerRadii.EMPTY, Insets.EMPTY)));
-        addAnimeGrabber = new AddAnimeGrabber();
+        addAnimeGrabber = new AddAnimeGrabber() {
+            @Override
+            public void onAnimeListUpdateFailure() {
+                if (statusTextArea!= null)
+                {
+                    statusTextArea.addTextLine("Updating AnimeList failed\nretrying...");
+                }
+            }
+        };
         addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
         addDownloadBar();
@@ -110,13 +119,13 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
     @Override
     public void handle(MouseEvent event) {
         //TODO
-        AddAnimeAnime addAnimeAnime = animeList.getSelectedItem();
+//        AddAnimeAnime addAnimeAnime = animeList.getSelectedItem();
         int endEpNo = Integer.valueOf(endEp.getText());
         int startEpNo = Integer.valueOf(startEp.getText());
         for (int i = startEpNo; i <= endEpNo ; i++){
             //Remove this from here
-            addAnimeAnime.setUrl("http://add-anime.net/next_episode.php?last=" + getEpisodeNo(i - 1) + "&cat=" +addAnimeAnime.getId() + ",");
-            addAnimeGrabber.enQueueAnimeLink(new Anime(addAnimeAnime.getName(), addAnimeAnime.getUrl(), i +""));
+//            addAnimeAnime.setUrl("http://add-anime.net/next_episode.php?last=" + getEpisodeNo(i - 1) + "&cat=" +addAnimeAnime.getId() + ",");
+            addAnimeGrabber.enQueueAnimeLink(new Anime("asdasd", "http://add-anime.net/next_episode.php?last=" + getEpisodeNo(i - 1) + "&cat=" +"110" + ",", i +""));
         }
         addAnimeGrabber.startGrabbing();
     }
@@ -144,4 +153,5 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
                 }
             });
     }
+
 }

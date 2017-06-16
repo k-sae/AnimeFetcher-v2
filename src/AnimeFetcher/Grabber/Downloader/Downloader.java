@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * Created by kemo on 29/05/2017.
  */
 public class Downloader {
-    private ArrayList<ProgressListener> progressListeners;
+    private ArrayList<DownloadProgressListener> downloadProgressListeners;
     private String location;
     private String fileName;
     public Downloader() {
-        progressListeners = new ArrayList<>();
+        downloadProgressListeners = new ArrayList<>();
         location = "downloads";
         fileName = "video.mp4";
     }
@@ -30,6 +30,7 @@ public class Downloader {
             params.add(location + "/" + fileName);
             params.add("-c");
             params.add(url);
+            triggerOnStart();
             ProcessBuilder processBuilder = new ProcessBuilder(params);
             processBuilder.redirectErrorStream(true); // for some reason it will not work without it :0
             Process process = processBuilder.start();
@@ -39,20 +40,12 @@ public class Downloader {
             while ((line = input.readLine()) != null) {
                Progress progress = parseProgress(line);
                if (progress != null)
-                for (ProgressListener progressListener: progressListeners
-                     ) {
-                    progressListener.reportProgress(progress);
-                }
+                triggerOnProgress(progress);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO
-        //      1- trigger the on finish listener
-        for ( ProgressListener progressListener: progressListeners
-             ) {
-            progressListener.onFinish();
-        }
+       triggerOnFinish();
     }
     private Progress parseProgress(String s)
     {
@@ -70,9 +63,9 @@ public class Downloader {
         }
         return null;
     }
-    public void addProgressListener(ProgressListener progressListener)
+    public void addProgressListener(DownloadProgressListener downloadProgressListener)
     {
-        progressListeners.add(progressListener);
+        downloadProgressListeners.add(downloadProgressListener);
     }
     public String getLocation() {
         return location;
@@ -98,5 +91,26 @@ public class Downloader {
      */
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    private void triggerOnProgress(Progress progress)
+    {
+        for (DownloadProgressListener downloadProgressListener : downloadProgressListeners
+                ) {
+            downloadProgressListener.reportProgress(progress);
+        }
+    }
+    private void triggerOnFinish() {
+        for (DownloadProgressListener downloadProgressListener : downloadProgressListeners
+                ) {
+            downloadProgressListener.onFinish();
+        }
+    }
+    private void triggerOnStart()
+    {
+        for ( DownloadProgressListener downloadProgressListener : downloadProgressListeners
+                ) {
+            downloadProgressListener.onStart();
+        }
     }
 }

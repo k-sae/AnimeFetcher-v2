@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 // i think this should be singleton
     // decide later :)
-public class AddAnimeGrabber extends Grabber {
+public abstract class AddAnimeGrabber extends Grabber {
     public AddAnimeGrabber(ArrayList<Anime> animes) {
         super(animes);
     }
@@ -52,6 +52,7 @@ public class AddAnimeGrabber extends Grabber {
     private Downloader downloader;
     private ArrayList<AddAnimeAnime> addAnimeAnimes;
     private ArrayList<ChangeListener<ArrayList<AddAnimeAnime>>> changeListeners;
+
     private String animeName;
     private int startEp;
     public AddAnimeGrabber() {
@@ -71,15 +72,21 @@ public class AddAnimeGrabber extends Grabber {
             @Override
             protected void analyze(String websiteData, Anime anime) throws CorruptedDataException {
                 addAnimeAnimes.clear();
-                Document document = Jsoup.parse(websiteData);
-                Elements s = document.select("form").last().select("select").first().select("option");
-                for (int i = 0; i < s.size(); i++) {
-                    Element element = s.get(i);
-                    addAnimeAnimes.add(new AddAnimeAnime(element.attr("label"),element.attr("value" )));
-                }
-                for (ChangeListener<ArrayList<AddAnimeAnime>> arrayListChangeListener: changeListeners
-                     ) {
-                    arrayListChangeListener.changed(null,null, addAnimeAnimes);
+                try {
+                    Document document = Jsoup.parse(websiteData);
+                    Elements s = document.select("form").last().select("select").first().select("option");
+                    for (int i = 0; i < s.size(); i++) {
+                        Element element = s.get(i);
+                        addAnimeAnimes.add(new AddAnimeAnime(element.attr("label"), element.attr("value")));
+                    }
+                    for (ChangeListener<ArrayList<AddAnimeAnime>> arrayListChangeListener : changeListeners
+                            ) {
+                        arrayListChangeListener.changed(null, null, addAnimeAnimes);
+                    }
+                }catch (NullPointerException ignored)
+                {
+                    onAnimeListUpdateFailure();
+                    throw  new CorruptedDataException();
                 }
             }
 
@@ -153,4 +160,5 @@ public class AddAnimeGrabber extends Grabber {
     public void setAnimeName(String animeName) {
         this.animeName = animeName;
     }
+    public abstract void onAnimeListUpdateFailure();
 }

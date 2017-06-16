@@ -16,12 +16,15 @@ import java.util.ArrayList;
 public abstract class Grabber {
     private ArrayList<Anime> animes;
     private int retryAfter;
+    private ArrayList<ProgressListener> progressListeners;
     public Grabber(ArrayList<Anime> animes) {
         this.animes = animes;
+        progressListeners  = new ArrayList<>();
     }
     public Grabber()
     {
         animes = new ArrayList<>();
+       progressListeners  = new ArrayList<>();
     }
     @SuppressWarnings("WeakerAccess")
     public ArrayList<Anime> getAnimes() {
@@ -44,21 +47,37 @@ public abstract class Grabber {
     public void startGrabbing()
     {
         new Thread(() -> {
+            Anime anime = null;
             while (animes.size() != 0) {
                 try {
                     //do it in two steps so when an exception is thrown no data is lost
-                    Anime anime = deQueueAnimeLink();
+                    anime = deQueueAnimeLink();
+                    triggerOnStart();
                     analyze(getWebsiteData(anime.getUrl()), anime);
-
-                } catch (IOException e) {
+                }catch (CorruptedDataException e) {
                     e.printStackTrace();
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
+                    triggerOnFail();
+                    if (anime != null)
+                        enQueueAnimeLink(anime);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    triggerOnFail();
+                    if (anime != null)
+                        enQueueAnimeLink(anime);
                 }
             }
+            triggerOnFinish();
         }).start();
     }
 
@@ -124,5 +143,35 @@ public abstract class Grabber {
      */
     public void setRetryAfter(int retryAfter) {
         this.retryAfter = retryAfter;
+    }
+
+    /**
+     * set a progress listener
+     * @param progressListener
+     */
+    public void setProgressListener(ProgressListener progressListener)
+    {
+        progressListeners.add(progressListener);
+    }
+    private void triggerOnStart()
+    {
+        for (ProgressListener progressListener: progressListeners
+                ) {
+            progressListener.onStart();
+        }
+    }
+    private void triggerOnFail()
+    {
+        for (ProgressListener progressListener: progressListeners
+                ) {
+            progressListener.onFail();
+        }
+    }
+    private void triggerOnFinish()
+    {
+        for (ProgressListener progressListener: progressListeners
+                ) {
+            progressListener.onFinish();
+        }
     }
 }
