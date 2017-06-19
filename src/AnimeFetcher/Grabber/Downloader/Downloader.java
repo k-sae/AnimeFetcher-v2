@@ -1,5 +1,6 @@
 package AnimeFetcher.Grabber.Downloader;
 
+import AnimeFetcher.Grabber.Downloader.DownloadProgressListener;
 import AnimeFetcher.Model.FileManager;
 
 import java.io.BufferedReader;
