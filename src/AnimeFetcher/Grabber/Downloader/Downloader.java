@@ -1,6 +1,6 @@
+
 package AnimeFetcher.Grabber.Downloader;
 
-import AnimeFetcher.Grabber.Downloader.DownloadProgressListener;
 import AnimeFetcher.Model.FileManager;
 
 import java.io.BufferedReader;
@@ -26,7 +26,7 @@ public class Downloader {
         try {
             // list with all params ti start wget
             ArrayList<String> params = new ArrayList<>(4);
-            params.add("Wget/wget.exe");
+            params.add(getBasicDownloader());
             params.add("-O");
             params.add(location + "/" + fileName);
             params.add("-c");
@@ -113,5 +113,11 @@ public class Downloader {
                 ) {
             downloadProgressListener.onStart();
         }
+    }
+    private String getBasicDownloader()
+    {
+        String s = System.getProperty("os.name").toLowerCase();
+        if (s.contains("lin")) return "wget";
+        else return "Wget/wget.exe";
     }
 }
