@@ -55,7 +55,6 @@ public abstract class Grabber {
                     triggerOnStart();
                     analyze(getWebsiteData(anime.getUrl()), anime);
                 }catch (CorruptedDataException e) {
-                    e.printStackTrace();
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e1) {
