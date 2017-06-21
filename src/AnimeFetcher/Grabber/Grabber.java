@@ -1,11 +1,10 @@
 package AnimeFetcher.Grabber;
 
+import AnimeFetcher.Grabber.Downloader.Downloader;
 import AnimeFetcher.Model.Anime;
+import AnimeFetcher.Model.FileManager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,14 +16,18 @@ public abstract class Grabber {
     private ArrayList<Anime> animes;
     private int retryAfter;
     private ArrayList<ProgressListener> progressListeners;
+     private Downloader downloader;
     public Grabber(ArrayList<Anime> animes) {
+        this();
         this.animes = animes;
-        progressListeners  = new ArrayList<>();
     }
     public Grabber()
     {
         animes = new ArrayList<>();
        progressListeners  = new ArrayList<>();
+       downloader = new Downloader();
+       downloader.setFileName("AddAnime_temp");
+       downloader.setLocation("cache");
     }
     @SuppressWarnings("WeakerAccess")
     public ArrayList<Anime> getAnimes() {
@@ -60,6 +63,7 @@ public abstract class Grabber {
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
+                    updateCookies(anime.getUrl());
                     triggerOnFail();
                     if (anime != null)
                         enQueueAnimeLink(anime);
@@ -93,32 +97,14 @@ public abstract class Grabber {
      is negative
      */
     private String getWebsiteData(String url) throws IOException {
-        HttpURLConnection httpURLConnection;
-        BufferedReader reader;
-        URL mUrl = fetchUrl(url);
-            httpURLConnection = (HttpURLConnection) mUrl.openConnection();
-            InputStream inputStream = httpURLConnection.getInputStream();
-            StringBuilder buffer = new StringBuilder();
-            if (inputStream == null) {
-                throw  new IOException();
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\n");
-            }
-            if (buffer.length() == 0) {
-                // empty response may be internet or else
-                //TODO #kareem
-                //              after many tests throw an appropriate exception message with the
-                //              appropriate exception
-                throw new IOException();
-            }
-            //lastly after finish make sure no to waste any bytes
-            httpURLConnection.disconnect();
-            reader.close();
-            return buffer.toString();
+        if (!FileManager.getInstance().exists(downloader.DEFAULT_CACHE_LOCATION)) updateCookies(url);
+            downloader.downloadWithCookies(url);
+        return FileManager.getInstance().read(downloader.getLocation() + "/" + downloader.getFileName());
 
+    }
+    private void updateCookies(String url)
+    {
+        downloader.cacheCookies(url);
     }
     //this should return a the full url with all the uri param
     //although u should specify the Request Method ie: (GET or POST)

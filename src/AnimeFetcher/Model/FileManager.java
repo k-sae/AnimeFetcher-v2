@@ -1,6 +1,6 @@
 package AnimeFetcher.Model;
 
-import java.io.File;
+import java.io.*;
 
 /**
  * Created by kemo on 31/05/2017.
@@ -23,5 +23,27 @@ public class FileManager {
             Folder.mkdir();
             nextFolderLocation += nestedFolders[i] + "/";
         }
+    }
+    public String read(String fileLocation)
+    {
+        try {
+            FileReader fileReader  = new FileReader(fileLocation);
+            BufferedReader br = new BufferedReader(fileReader);
+           StringBuilder s = new StringBuilder();
+           String line;
+            while ((line = br.readLine()) != null) {
+                s.append(line);
+            }
+            fileReader.close();
+            br.close();
+            return s.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public Boolean exists(String fileLocation)
+    {
+        return new File(fileLocation).exists();
     }
 }

@@ -108,7 +108,9 @@ public abstract class AddAnimeGrabber extends Grabber {
         JSParser jsParser = new JSParser(websiteData);
         downloader.setFileName(anime.getName() + " " + anime.getEpNo() + ".mp4");
         if (videoType == VideoType.HighQuality) {
-            downloader.startDownloading(jsParser.pickVariable("hq_video_file"));
+            String s = jsParser.pickVariable("hq_video_file");
+            if (s == null) throw new CorruptedDataException();
+            downloader.startDownloading(s);
         }
         else if (videoType == VideoType.Normal)
         {

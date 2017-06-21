@@ -17,7 +17,8 @@ public class Downloader {
     private String fileName;
     private ArrayList<String> params;
     private String downloader;
-    private final String DEFAULT_CACHE_LOCATION = "cache/";
+
+    public final String DEFAULT_CACHE_LOCATION = "cache/cookies";
     public Downloader() {
         downloadProgressListeners = new ArrayList<>();
         location = "downloads";
@@ -34,7 +35,7 @@ public class Downloader {
             params.add("-O");
             params.add(location + "/" + fileName);
             params.add("-c");
-            params.add(url);
+            params.add(filterUrl(url));
             triggerOnStart();
             Process process = startDownloader();
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -54,16 +55,21 @@ public class Downloader {
     private Progress parseProgress(String s)
     {
         final String PROGRESS_SCHEMA = ".......... .......... .......... .......... ..........";
-        if (s.contains(PROGRESS_SCHEMA))
+        try {
+            System.out.println(s);
+            if (s.contains(PROGRESS_SCHEMA)) {
+                s = s.substring(s.indexOf(PROGRESS_SCHEMA) + PROGRESS_SCHEMA.length());
+                s = s.replace("  ", " ");
+                String[] strings = s.split(" ");
+                Progress progress = new Progress();
+                progress.setPercentage(strings[1]);
+                progress.setSpeed(strings[2]);
+                progress.setTimeRemaining(strings[3]);
+                return progress;
+            }
+        }catch (Exception e)
         {
-           s = s.substring(s.indexOf(PROGRESS_SCHEMA) + PROGRESS_SCHEMA.length());
-           s = s.replace("  ", " ");
-           String[] strings = s.split(" ");
-            Progress progress = new Progress();
-            progress.setPercentage(strings[1]);
-            progress.setSpeed(strings[2]);
-            progress.setTimeRemaining(strings[3]);
-            return progress ;
+//            e.printStackTrace();
         }
         return null;
     }
@@ -130,7 +136,7 @@ public class Downloader {
     public void cacheCookies(String url, String location)
     {
         params.add("--save-cookies");
-        params.add(location + "/cookies");
+        params.add(location);
         params.add("--keep-session-cookies");
         params.add("--delete-after");
         params.add(url);
@@ -160,5 +166,15 @@ public class Downloader {
         params.add("--load-cookies");
         params.add(cookiesLocation);
         startDownloading(url);
+    }
+    //TODO
+    //      test it on windows
+    private String filterUrl(String url)
+    {
+        if (url.contains("&"))
+        {
+           url = url.replace("&", "\\&");
+        }
+        return url;
     }
 }
