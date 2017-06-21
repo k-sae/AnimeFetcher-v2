@@ -58,6 +58,7 @@ public abstract class AddAnimeGrabber extends Grabber {
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
         downloader = new Downloader();
+        downloader.setAutoResume(true);
         changeListeners = new ArrayList<>();
         isInProgress = false;
         // i have used this initial value to prevent the recreation of array many times

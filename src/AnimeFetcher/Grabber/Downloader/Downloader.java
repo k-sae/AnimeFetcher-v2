@@ -18,6 +18,7 @@ public class Downloader {
     private ArrayList<String> params;
     private String downloader;
 
+    private boolean autoResume;
     public final String DEFAULT_CACHE_LOCATION = "cache/cookies";
     public Downloader() {
         downloadProgressListeners = new ArrayList<>();
@@ -26,6 +27,7 @@ public class Downloader {
         params = new ArrayList<>();
         downloader = getBasicDownloader();
         params.add(downloader);
+        autoResume = false;
     }
     public void startDownloading(String url)
     {
@@ -34,6 +36,7 @@ public class Downloader {
             // list with all params ti start wget
             params.add("-O");
             params.add(location + "/" + fileName);
+            if (autoResume)
             params.add("-c");
             params.add(filterUrl(url));
             triggerOnStart();
@@ -139,7 +142,9 @@ public class Downloader {
         params.add(location);
         params.add("--keep-session-cookies");
         params.add("--delete-after");
-        params.add(url);
+        params.add("-O");
+        params.add(location + "__temp");
+        params.add(filterUrl(url));
         try {
             startDownloader().waitFor();
         } catch (IOException | InterruptedException e) {
@@ -176,5 +181,12 @@ public class Downloader {
            url = url.replace("&", "\\&");
         }
         return url;
+    }
+    public boolean isAutoResume() {
+        return autoResume;
+    }
+
+    public void setAutoResume(boolean autoResume) {
+        this.autoResume = autoResume;
     }
 }
