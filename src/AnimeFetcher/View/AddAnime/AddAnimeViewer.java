@@ -5,6 +5,7 @@ import AnimeFetcher.Grabber.ProgressListener;
 import AnimeFetcher.Main;
 import AnimeFetcher.Model.AddAnimeAnime;
 import AnimeFetcher.Model.Anime;
+import AnimeFetcher.Model.Config;
 import AnimeFetcher.View.DownloadBar;
 import AnimeFetcher.View.HelperUIComponents.AutoScrollTextArea;
 import AnimeFetcher.View.HelperUIComponents.NumericTextField;
@@ -53,7 +54,7 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
         };
         addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
-        addAnimeGrabber.getDownloader().setLocation(Main.config.getDownloadLocation());
+        addAnimeGrabber.getDownloader().setLocation(Config.getInstance().getDownloadLocation());
         addDownloadBar();
         addStatusBar();
     }

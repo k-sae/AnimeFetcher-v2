@@ -10,7 +10,7 @@ import java.io.File;
 public class Config {
     private String downloadLocation;
     private static Config instance;
-    public Config()
+    private Config()
     {
         downloadLocation = "downloads";
     }

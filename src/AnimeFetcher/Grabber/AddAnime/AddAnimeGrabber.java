@@ -6,6 +6,7 @@ import AnimeFetcher.Grabber.Grabber;
 import AnimeFetcher.Grabber.JSParser;
 import AnimeFetcher.Model.AddAnimeAnime;
 import AnimeFetcher.Model.Anime;
+import AnimeFetcher.Model.Config;
 import javafx.beans.value.ChangeListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -107,6 +108,7 @@ public abstract class AddAnimeGrabber extends Grabber {
     @Override
     protected void analyze(String websiteData, Anime anime)  throws CorruptedDataException {
         JSParser jsParser = new JSParser(websiteData);
+        downloader.setLocation(Config.getInstance().getDownloadLocation() + "/" + anime.getName());
         downloader.setFileName(anime.getName() + " " + anime.getEpNo() + ".mp4");
         if (videoType == VideoType.HighQuality) {
             String s = jsParser.pickVariable("hq_video_file");
