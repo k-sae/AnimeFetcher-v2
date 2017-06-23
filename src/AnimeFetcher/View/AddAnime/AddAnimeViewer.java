@@ -53,6 +53,7 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
         };
         addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
+        addAnimeGrabber.getDownloader().setLocation(Main.config.getDownloadLocation());
         addDownloadBar();
         addStatusBar();
     }

@@ -1,5 +1,7 @@
 package AnimeFetcher.Model;
 
+import com.google.gson.Gson;
+
 import java.io.*;
 
 /**
@@ -45,5 +47,29 @@ public class FileManager {
     public Boolean exists(String fileLocation)
     {
         return new File(fileLocation).exists();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public BufferedWriter openToWrite(String FileName) {
+        try {
+            FileWriter fileWriter = new FileWriter(FileName);
+            return new BufferedWriter(fileWriter);
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    public void write(String fileLocation, String content)
+    {
+        BufferedWriter bufferedWriter = openToWrite(fileLocation);
+        if (bufferedWriter != null) {
+            try {
+                bufferedWriter.write(content);
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 }

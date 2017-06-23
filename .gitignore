@@ -1,5 +1,6 @@
 *.class
 downloads/
+config.txt
 cache/
 *.html
 # Mobile Tools for Java (J2ME)
