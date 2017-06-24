@@ -31,8 +31,10 @@ public class Main extends Application {
         final String CONFIG_FILE = "config.txt";
         themeManager = new DarkTheme();
         Config config = Config.getInstance();
+        if(args.length < 1)
         config.importFromFile(CONFIG_FILE);
-        config.exportToFile(CONFIG_FILE);
+        else
+            config.importFromFile(args[0]);
         launch(args);
     }
 }
