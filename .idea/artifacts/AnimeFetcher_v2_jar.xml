@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AnimeFetcher-v2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AnimeFetcher_v2_jar</output-path>
+    <root id="archive" name="AnimeFetcher-v2.jar">
+      <element id="module-output" name="AnimeFetcher-v2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/gson-2.8.0.zip" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/jsoup-1.10.2.zip" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
