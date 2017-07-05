@@ -56,7 +56,7 @@ public abstract class Grabber {
                     //do it in two steps so when an exception is thrown no data is lost
                     anime = deQueueAnimeLink();
                     triggerOnStart();
-                    analyze(getWebsiteData(anime.getUrl()), anime);
+                    analyze(getWebsiteData(fetchUrl(anime)), anime);
                 }catch (CorruptedDataException e) {
                     try {
                         Thread.sleep(1000);
@@ -114,7 +114,7 @@ public abstract class Grabber {
      * @param animeLink the next link in the link queue
      * @return URL after adding last changes
      */
-    protected abstract URL fetchUrl(String animeLink);
+    protected abstract String fetchUrl(Anime animeLink);
 
     /**
      * @return  time needed in milli seconds for next retry when connection fails

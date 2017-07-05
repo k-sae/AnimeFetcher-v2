@@ -20,6 +20,7 @@ public class Downloader {
 
     private boolean autoResume;
     public final String DEFAULT_CACHE_LOCATION = "cache/cookies";
+    Progress progress = new Progress();
     public Downloader() {
         downloadProgressListeners = new ArrayList<>();
         location = "downloads";
@@ -45,7 +46,7 @@ public class Downloader {
             String line;
             //start listening for wget
             while ((line = input.readLine()) != null) {
-               Progress progress = parseProgress(line);
+               parseProgress(line);
                if (progress != null)
                 triggerOnProgress(progress);
             }
@@ -55,7 +56,7 @@ public class Downloader {
         clearParams();
        triggerOnFinish();
     }
-    private Progress parseProgress(String s)
+    private void parseProgress(String s)
     {
         final String PROGRESS_SCHEMA = ".......... .......... .......... .......... ..........";
         try {
@@ -64,17 +65,14 @@ public class Downloader {
                 s = s.substring(s.indexOf(PROGRESS_SCHEMA) + PROGRESS_SCHEMA.length());
                 s = s.replace("  ", " ");
                 String[] strings = s.split(" ");
-                Progress progress = new Progress();
                 progress.setPercentage(strings[1]);
                 progress.setSpeed(strings[2]);
                 progress.setTimeRemaining(strings[3]);
-                return progress;
             }
         }catch (Exception e)
         {
 //            e.printStackTrace();
         }
-        return null;
     }
     public void addProgressListener(DownloadProgressListener downloadProgressListener)
     {

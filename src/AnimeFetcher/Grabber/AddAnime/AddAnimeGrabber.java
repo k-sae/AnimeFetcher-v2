@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public abstract class AddAnimeGrabber extends Grabber {
 
     private String animeName;
     private int startEp;
+    private int numberingSchema;
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
         downloader = new Downloader();
@@ -67,6 +69,7 @@ public abstract class AddAnimeGrabber extends Grabber {
         //TODO
         //      1- Modify it later or may add the initialization in the update list function
         addAnimeAnimes = new ArrayList<>(2400);
+        numberingSchema = 3;
     }
     public void updateAnimeList()
     {
@@ -93,13 +96,8 @@ public abstract class AddAnimeGrabber extends Grabber {
             }
 
             @Override
-            protected URL fetchUrl(String animeLink) {
-                try {
-                    return new URL(animeLink);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                return null;
+            protected String fetchUrl(Anime animeLink) {
+                return animeLink.getUrl();
             }
         };
         grabber.enQueueAnimeLink(new Anime("http://add-anime.net/"));
@@ -107,6 +105,7 @@ public abstract class AddAnimeGrabber extends Grabber {
     }
     @Override
     protected void analyze(String websiteData, Anime anime)  throws CorruptedDataException {
+       if (!validateTheWebsite(websiteData)) throw  new CorruptedDataException() ;
         JSParser jsParser = new JSParser(websiteData);
         downloader.setLocation(Config.getInstance().getDownloadLocation() + "/" + anime.getName());
         downloader.setFileName(anime.getName() + " " + anime.getEpNo() + ".mp4");
@@ -122,13 +121,11 @@ public abstract class AddAnimeGrabber extends Grabber {
     }
 
     @Override
-    protected URL fetchUrl(String animeLink) {
-        try {
-            return new URL(animeLink);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected String fetchUrl(Anime animeLink) {
+            return animeLink.getUrl()
+                    + "last=" + getEpisodeNo(Integer.valueOf(animeLink.getEpNo()))
+                    + "&cat=" + animeLink.getCat()
+                    + ",";
     }
     public void setOnListChangeListener(ChangeListener<ArrayList<AddAnimeAnime>> changeListener)
     {
@@ -166,4 +163,46 @@ public abstract class AddAnimeGrabber extends Grabber {
         this.animeName = animeName;
     }
     public abstract void onAnimeListUpdateFailure();
+
+    //TODO
+    public boolean validateTheWebsite(String website)
+    {
+        Document document = Jsoup.parse(website);
+         Elements elements =  document.select("a");
+        for (Element element: elements
+             ) {
+            if (element.hasClass("btn btn-small btn-danger"))
+            {
+                String val =  element.attr("href");
+                val = val.substring(val.indexOf("last=") + 5);
+               val =  val.substring(0, val.indexOf("&"));
+                if (val.length() != numberingSchema)
+                {
+                    numberingSchema = val.length();
+                    return false;
+                }
+                else return true;
+            }
+
+        }
+        return true;
+    }
+
+    private String getEpisodeNo(int num)
+    {
+        if (num < 10 && numberingSchema == 3)
+        {
+            return "00" + num;
+        }
+        else if(num < 10 && numberingSchema == 2)
+        {
+            return  "0" + num;
+        }
+        else if (num < 100 && numberingSchema == 3)
+        {
+            return  "0" + num;
+        }
+        else return num + "";
+    }
+
 }

@@ -126,25 +126,12 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
         int startEpNo = Integer.valueOf(startEp.getText());
         for (int i = startEpNo; i <= endEpNo ; i++) {
             //Remove this from here
-            addAnimeAnime.setUrl("http://add-anime.net/next_episode.php?last=" + getEpisodeNo(i - 1) + "&cat=" + addAnimeAnime.getId() + ",");
-            addAnimeGrabber.enQueueAnimeLink(new Anime(addAnimeAnime.getName(), addAnimeAnime.getUrl(), i +""));
+            addAnimeAnime.setUrl("http://add-anime.net/next_episode.php?");
+            addAnimeGrabber.enQueueAnimeLink(new Anime(addAnimeAnime.getName(), addAnimeAnime.getUrl(), i +"", addAnimeAnime.getId()));
 
         }
         addAnimeGrabber.startGrabbing();
     }
-    private String getEpisodeNo(int num)
-    {
-        if (num < 10)
-        {
-            return "00" + num;
-        }
-        else if(num < 100)
-        {
-            return  "0" + num;
-        }
-        else return num + "";
-    }
-
     @FunctionName("AnimeListChanged")
     @Override
     public void changed(ObservableValue<? extends ArrayList<AddAnimeAnime>> observable, ArrayList<AddAnimeAnime> oldValue, ArrayList<AddAnimeAnime> newValue) {
