@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
  * Created by kemo on 07/06/2017.
  */
 public class DownloadBar extends HBox implements DownloadProgressListener {
-    private Downloader downloader;
+    public static Downloader downloader;
     private ProgressBar progressBar;
     private Label percentage;
     private Label timeRemaining;

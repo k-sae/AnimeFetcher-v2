@@ -57,7 +57,7 @@ public abstract class AddAnimeGrabber extends Grabber {
 
     private String animeName;
     private int startEp;
-    private int numberingSchema;
+    private volatile int numberingSchema;
     public AddAnimeGrabber() {
         videoType = VideoType.HighQuality;
         downloader = new Downloader();
@@ -123,7 +123,7 @@ public abstract class AddAnimeGrabber extends Grabber {
     @Override
     protected String fetchUrl(Anime animeLink) {
             return animeLink.getUrl()
-                    + "last=" + getEpisodeNo(Integer.valueOf(animeLink.getEpNo()))
+                    + "last=" + getEpisodeNo(Integer.valueOf(animeLink.getEpNo()) - 1)
                     + "&cat=" + animeLink.getCat()
                     + ",";
     }

@@ -3,6 +3,7 @@ downloads/
 config.txt
 cache/
 out/
+Trailer/
 *.html
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

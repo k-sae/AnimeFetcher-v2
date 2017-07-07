@@ -1,6 +1,7 @@
 package AnimeFetcher;
 
 import AnimeFetcher.Model.Config;
+import AnimeFetcher.View.DownloadBar;
 import AnimeFetcher.View.MainFrame;
 import AnimeFetcher.View.ThemeManager.DarkTheme;
 import AnimeFetcher.View.ThemeManager.ThemeManager;
@@ -30,6 +31,7 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
+        DownloadBar.downloader.stop();
         System.exit(0);
     }
 

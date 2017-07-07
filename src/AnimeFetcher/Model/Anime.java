@@ -54,6 +54,7 @@ public class Anime {
     }
 
     public String getCat() {
+
         return cat;
     }
 

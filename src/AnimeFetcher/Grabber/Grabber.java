@@ -66,7 +66,7 @@ public abstract class Grabber {
                     updateCookies(anime.getUrl());
                     triggerOnFail();
                     if (anime != null)
-                        enQueueAnimeLink(anime);
+                        animes.add(0,anime);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -77,7 +77,7 @@ public abstract class Grabber {
                     }
                     triggerOnFail();
                     if (anime != null)
-                        enQueueAnimeLink(anime);
+                        animes.add(0,anime);
                 }
             }
             triggerOnFinish();

@@ -20,7 +20,8 @@ public class Downloader {
 
     private boolean autoResume;
     public final String DEFAULT_CACHE_LOCATION = "cache/cookies";
-    Progress progress = new Progress();
+    private Progress progress = new Progress();
+    private Process process;
     public Downloader() {
         downloadProgressListeners = new ArrayList<>();
         location = "downloads";
@@ -41,7 +42,7 @@ public class Downloader {
             params.add("-c");
             params.add(filterUrl(url));
             triggerOnStart();
-            Process process = startDownloader();
+            process = startDownloader();
             BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             //start listening for wget
@@ -187,4 +188,10 @@ public class Downloader {
     public void setAutoResume(boolean autoResume) {
         this.autoResume = autoResume;
     }
+
+    public void stop()
+    {
+        process.destroy();
+    }
+
 }
