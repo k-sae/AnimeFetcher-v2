@@ -17,6 +17,7 @@ public class SearchBar<T> extends ComboBox<T> implements ChangeListener<String>,
     private ArrayList<T> searchItems;
     private boolean isChecked;
     private ArrayList<T> items;
+    private boolean caseSensitive;
     public SearchBar()
     {
         items = new ArrayList<>();
@@ -63,11 +64,16 @@ public class SearchBar<T> extends ComboBox<T> implements ChangeListener<String>,
         items.clear();
         if (searchItems == null) return;
         for (int i = 0; i < searchItems.size() ; i++) {
-            if (searchItems.get(i).toString().contains(token))
+            if (compare(searchItems.get(i).toString(), token))
             {
                 items.add(searchItems.get(i));
             }
         }
+    }
+    private boolean compare(String item, String token)
+    {
+        if (!caseSensitive)return item.toLowerCase().contains(token.toLowerCase());
+        return item.contains(token);
     }
     public T getSelectedItem()
     {
@@ -76,5 +82,13 @@ public class SearchBar<T> extends ComboBox<T> implements ChangeListener<String>,
         }catch (Exception e){
             return null;
         }
+    }
+
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
     }
 }

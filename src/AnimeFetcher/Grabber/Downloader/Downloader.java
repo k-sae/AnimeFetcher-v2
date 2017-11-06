@@ -191,6 +191,7 @@ public class Downloader {
 
     public void stop()
     {
+        if (process != null)
         process.destroy();
     }
 

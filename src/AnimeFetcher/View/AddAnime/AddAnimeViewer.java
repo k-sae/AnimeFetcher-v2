@@ -1,7 +1,7 @@
 package AnimeFetcher.View.AddAnime;
 
 import AnimeFetcher.Grabber.AddAnime.AddAnimeGrabber;
-import AnimeFetcher.Grabber.ProgressListener;
+import AnimeFetcher.Grabber.AddAnime.VideoType;
 import AnimeFetcher.Main;
 import AnimeFetcher.Model.AddAnimeAnime;
 import AnimeFetcher.Model.Anime;
@@ -18,7 +18,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -55,6 +54,7 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
         addAnimeGrabber.setOnListChangeListener(this);
         addAnimeGrabber.updateAnimeList();
         addAnimeGrabber.getDownloader().setLocation(Config.getInstance().getDownloadLocation());
+        addAnimeGrabber.setVideoType(VideoType.HighQuality);
         addDownloadBar();
         addStatusBar();
     }
@@ -67,6 +67,7 @@ public class AddAnimeViewer extends VBox implements EventHandler<MouseEvent>, Ch
     {
         animeList = new SearchBar<>();
         animeList.setMaxWidth(200);
+        animeList.setCaseSensitive(false);
         startEp = initNumericTextField();
         endEp = initNumericTextField();
         //Left part
