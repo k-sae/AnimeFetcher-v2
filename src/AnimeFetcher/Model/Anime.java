@@ -13,7 +13,7 @@ public class Anime {
     }
 
     public Anime(String name, String url, String epNo) {
-        this.name = name;
+        setName(name);
         this.url = url;
         this.epNo = epNo;
     }
@@ -34,7 +34,7 @@ public class Anime {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.replace("/", "-");
     }
 
     public String getUrl() {
